@@ -6,6 +6,7 @@ import org.jasypt.encryption.pbe.config.SimpleStringPBEConfig;
 import picocli.CommandLine;
 
 import java.util.concurrent.Callable;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static com.ing.api.contacting.JasyptEncryptorConfigurationProperties.createProperties;
@@ -64,24 +65,22 @@ public class Processor implements Callable<Integer> {
 
     private void decryptFile(String jasyptPwd, String filename) {
         var dec = getEncDec(jasyptPwd);
-        printSeparator();
-        var fileReader = new FileReader(filename);
-        for (var entry : fileReader.getEntries()) {
-            System.out.printf("%s: %s\n", entry.getValue0(), dec.decrypt(entry.getValue1()));
-        }
-        System.out.println();
+        encryptDecryptFile(jasyptPwd, filename, s -> dec.decrypt(s));
     }
 
     private void encryptFile(String jasyptPwd, String filename) {
         var dec = getEncDec(jasyptPwd);
+        encryptDecryptFile(jasyptPwd, filename, s -> dec.encrypt(s));
+    }
+
+    private void encryptDecryptFile(String jasyptPwd, String filename, Function<String, String> fun) {
         printSeparator();
         var fileReader = new FileReader(filename);
         for (var entry : fileReader.getEntries()) {
-            System.out.printf("%s: %s\n", entry.getValue0(), dec.encrypt(entry.getValue1()));
+            System.out.printf("%s: %s\n", entry.getValue0(), fun.apply(entry.getValue1()));
         }
         System.out.println();
     }
-
     private static EncDec getEncDec(String jasyptPwd) {
         var stringEncryptor = createPBEDefault(jasyptPwd, createProperties());
 

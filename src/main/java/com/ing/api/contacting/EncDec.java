@@ -6,7 +6,7 @@ public class EncDec {
     final private String JASYPT_INITIAL_MARKER = "ENC(";
     final private String JASYPT_FINAL_MARKER = ")";
 
-    private StringEncryptor stringEncryptor;
+    private final StringEncryptor stringEncryptor;
     EncDec(StringEncryptor stringEncryptor) {
         this.stringEncryptor = stringEncryptor;
     }

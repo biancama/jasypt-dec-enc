@@ -12,6 +12,7 @@
     <jasypt.version>1.9.3</jasypt.version>
     <maven.compiler.release>17</maven.compiler.release>
     <picocli.version>4.7.5</picocli.version>
+    <tuple.version>1.2</tuple.version>
   </properties>
   <dependencies>
     <dependency>
@@ -29,6 +30,11 @@
       <groupId>info.picocli</groupId>
       <artifactId>picocli</artifactId>
       <version>${picocli.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.javatuples</groupId>
+      <artifactId>javatuples</artifactId>
+      <version>${tuple.version}</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>

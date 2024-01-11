@@ -54,14 +54,14 @@ public class Processor implements Callable<Integer> {
     private void encrypt(String jasyptPwd, String pwd) {
         EncDec dec = getEncDec(jasyptPwd);
         printSeparator();
-        System.out.printf("%s", dec.encrypt(pwd));
+        System.out.printf("%s\n", dec.encrypt(pwd));
     }
 
 
     private void decrypt(String jasyptPwd, String pwd) {
         EncDec dec = getEncDec(jasyptPwd);
         printSeparator();
-        System.out.printf("%s", dec.decrypt(pwd));
+        System.out.printf("%s\n", dec.decrypt(pwd));
     }
 
     private void decryptFile(String jasyptPwd, String filename) {

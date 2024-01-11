@@ -27,7 +27,7 @@ public class FileReader {
     }
 
     public List<Pair<String, String>> getEntries() {
-        var result = new ArrayList<Pair<String, String>>();
+        List<Pair<String, String>> result = new ArrayList<>();
         for (String line: getLines(filename)) {
             String[] separated = line.split(keyValueSeparator);
             result.add(new Pair<>(separated[0].trim(), separated[1].trim()));

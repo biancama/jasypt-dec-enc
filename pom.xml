@@ -6,13 +6,15 @@
   <packaging>jar</packaging>
   <version>1.0-SNAPSHOT</version>
   <name>jasypt-dec-enc</name>
-  <url>http://maven.apache.org</url>
   <properties>
+    <maven.compiler.source>8</maven.compiler.source>
+    <maven.compiler.target>8</maven.compiler.target>
     <maven-compiler-plugin-version>3.12.1</maven-compiler-plugin-version>
     <jasypt.version>1.9.3</jasypt.version>
-    <maven.compiler.release>17</maven.compiler.release>
+
     <picocli.version>4.7.5</picocli.version>
     <tuple.version>1.2</tuple.version>
+    <maven-exec-plugin>3.1.1</maven-exec-plugin>
   </properties>
   <dependencies>
     <dependency>
@@ -48,17 +50,10 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>${maven-compiler-plugin-version}</version>
-        <configuration>
-          <!-- put your configurations here -->
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
         <!-- annotationProcessorPaths requires maven-compiler-plugin version 3.5 or higher -->
         <version>${maven-compiler-plugin-version}</version>
         <configuration>
+          <verbose>true</verbose>
           <annotationProcessorPaths>
             <path>
               <groupId>info.picocli</groupId>
@@ -69,6 +64,14 @@
           <compilerArgs>
             <arg>-Aproject=${project.groupId}/${project.artifactId}</arg>
           </compilerArgs>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>${maven-exec-plugin}</version>
+        <configuration>
+          <mainClass>com.ing.api.contacting.App</mainClass>
         </configuration>
       </plugin>
     </plugins>

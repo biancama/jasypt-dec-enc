@@ -3,6 +3,7 @@ package com.ing.api.contacting;
 import org.jasypt.encryption.StringEncryptor;
 import org.jasypt.encryption.pbe.PooledPBEStringEncryptor;
 import org.jasypt.encryption.pbe.config.SimpleStringPBEConfig;
+import org.javatuples.Pair;
 import picocli.CommandLine;
 
 import java.util.concurrent.Callable;
@@ -10,7 +11,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static com.ing.api.contacting.JasyptEncryptorConfigurationProperties.createProperties;
-import static java.lang.String.format;
+
 
 @CommandLine.Command(name = "enc-dev", mixinStandardHelpOptions = true, version = "1.0",
         description = "Prints the encrypted or decrypted password to STDOUT.")
@@ -51,47 +52,47 @@ public class Processor implements Callable<Integer> {
 
 
     private void encrypt(String jasyptPwd, String pwd) {
-        var dec = getEncDec(jasyptPwd);
+        EncDec dec = getEncDec(jasyptPwd);
         printSeparator();
         System.out.printf("%s", dec.encrypt(pwd));
     }
 
 
     private void decrypt(String jasyptPwd, String pwd) {
-        var dec = getEncDec(jasyptPwd);
+        EncDec dec = getEncDec(jasyptPwd);
         printSeparator();
         System.out.printf("%s", dec.decrypt(pwd));
     }
 
     private void decryptFile(String jasyptPwd, String filename) {
-        var dec = getEncDec(jasyptPwd);
+        EncDec dec = getEncDec(jasyptPwd);
         encryptDecryptFile(jasyptPwd, filename, s -> dec.decrypt(s));
     }
 
     private void encryptFile(String jasyptPwd, String filename) {
-        var dec = getEncDec(jasyptPwd);
+        EncDec dec = getEncDec(jasyptPwd);
         encryptDecryptFile(jasyptPwd, filename, s -> dec.encrypt(s));
     }
 
     private void encryptDecryptFile(String jasyptPwd, String filename, Function<String, String> fun) {
         printSeparator();
-        var fileReader = new FileReader(filename);
-        for (var entry : fileReader.getEntries()) {
+        FileReader fileReader = new FileReader(filename);
+        for (Pair<String, String> entry : fileReader.getEntries()) {
             System.out.printf("%s: %s\n", entry.getValue0(), fun.apply(entry.getValue1()));
         }
         System.out.println();
     }
     private static EncDec getEncDec(String jasyptPwd) {
-        var stringEncryptor = createPBEDefault(jasyptPwd, createProperties());
+        StringEncryptor stringEncryptor = createPBEDefault(jasyptPwd, createProperties());
 
-        var dec = new EncDec(stringEncryptor);
+        EncDec dec = new EncDec(stringEncryptor);
         return dec;
     }
 
     private static <T> T get(Supplier<T> supplier, String key, T defaultValue) {
         T value = supplier.get();
         if (value == defaultValue) {
-            System.out.println(format("Encryptor config not found for property %s, using default value: %s", key, value));
+            System.out.println(String.format("Encryptor config not found for property %s, using default value: %s", key, value));
         }
         return value;
     }
